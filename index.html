@@ -1,601 +1,913 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Songify - Ultimate Music Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="assets/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Songify</title>
+  <meta name="description" content="A modern music streaming application powered by JATIN SHARMA">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>
+    tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#6366f1', // Indigo
+          foreground: '#ffffff',
+        },
+        secondary: {
+          DEFAULT: '#10b981', // Emerald
+          foreground: '#ecfdf5',
+        },
+        muted: {
+          DEFAULT: '#334155', // Slate Gray
+          foreground: '#94a3b8',
+        },
+        accent: {
+          DEFAULT: '#746FAB', //slaty
+          foreground: '#ffffff',
+        },
+        card: {
+          DEFAULT: '#0f172a', // Deep Slate
+          foreground: '#e2e8f0',
+        },
+        border: '#1e293b', // Cool dark border
+        background: '#0b1120', // Deep dark blue
+        foreground: '#f1f5f9', // Soft light text
+      },
+      borderRadius: {
+        lg: '0.75rem',
+        md: '0.5rem',
+        sm: '0.25rem',
+      },
+    },
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
+  },
+};
+
+  </script>
 </head>
-<body class="overscroll-none">
-    <div class="app-container flex w-full h-screen overflow-hidden relative">
-        <!-- Floating background elements with animated gradient blobs -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-gradient-to-r from-purple-900 to-transparent opacity-10 blur-3xl animate-float"></div>
-            <div class="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full bg-gradient-to-l from-indigo-900 to-transparent opacity-10 blur-3xl animate-float" style="animation-delay: 2s;"></div>
-            <div class="absolute top-2/3 left-1/3 w-72 h-72 rounded-full bg-gradient-to-br from-pink-900 to-transparent opacity-10 blur-3xl animate-float" style="animation-delay: 4s;"></div>
-            
-            <!-- Animated sound waves -->
-            <svg class="absolute bottom-0 left-0 w-full opacity-5" viewBox="0 0 1440 320">
-                <path fill="#7b4dff" fill-opacity="1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+<body class="bg-background text-foreground">
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <!-- <div id="sidebar" class="h-full bg-card text-card-foreground border-r border-border transition-all duration-300 flex flex-col w-64">
+      <div class="p-6">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary-foreground">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
             </svg>
+          </div>
+          <h1 class="text-xl font-bold tracking-tight">Songify</h1>
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-auto">
+        <div class="px-3 py-2">
+          <div class="space-y-1">
+            <button id="toggle-sidebar" class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+              <span>Collapse</span>
+            </button>
+          </div>
+        </div>
+
+        <nav class="px-3 py-2">
+          <div class="space-y-1">
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md bg-accent text-accent-foreground" data-view="home">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <span>Home</span>
+            </button>
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="search">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+              <span>Search</span>
+            </button>
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="explore">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+              </svg>
+              <span>Explore</span>
+            </button>
+          </div>
+        </nav>
+
+        <div class="px-3 py-2">
+          <h3 class="mb-2 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            Your Library
+          </h3>
+          <div class="space-y-1">
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="library">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+              </svg>
+              <span>Your Library</span>
+            </button>
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="liked">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+              </svg>
+              <span>Liked Songs</span>
+            </button>
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="recent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"></path>
+                <path d="M12 7v5l3 3"></path>
+              </svg>
+              <span>Recently Played</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="px-3 py-2">
+          <h3 class="mb-2 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            Playlists
+          </h3>
+          <div class="space-y-1">
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="create-playlist">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 8v8"></path>
+                <path d="M8 12h8"></path>
+              </svg>
+              <span>Create Playlist</span>
+            </button>
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="playlist-chill">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+              </svg>
+              <span>Chill Vibes</span>
+            </button>
+            <button class="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="playlist-workout">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+              </svg>
+              <span>Workout Mix</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-border">
+        <button id="toggle-theme" class="flex items-center gap-3 px-3 py-2 w-full text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <span>Light Mode</span>
+        </button>
+      </div>
+    </div> -->
+
+<div id="sidebar" class="h-full bg-card text-card-foreground border-r border-border transition-all duration-300 flex flex-col w-16 md:w-64">
+  <!-- Compact Header -->
+  <div class="p-4 flex justify-center md:justify-start md:px-6 md:py-4">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary-foreground">
+          <path d="M9 18V5l12-2v13"></path>
+          <circle cx="6" cy="18" r="3"></circle>
+          <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+      </div>
+      <h1 class="hidden md:block text-xl font-bold tracking-tight">Songify</h1>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-auto">
+    <!-- Collapse Button -->
+    <div class="px-2 py-1 md:px-3 md:py-2">
+      <button id="toggle-sidebar" class="w-full flex justify-center md:justify-start items-center gap-3 p-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+          <line x1="21" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="6" x2="3" y2="6"></line>
+          <line x1="21" y1="18" x2="3" y2="18"></line>
+        </svg>
+        <span class="hidden md:inline">Expand</span>
+      </button>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="px-1 py-1 md:px-3 md:py-2">
+      <div class="space-y-1">
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md bg-accent text-accent-foreground" data-view="home" title="Home">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span class="hidden md:inline">Home</span>
+        </button>
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="search" title="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <span class="hidden md:inline">Search</span>
+        </button>
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="explore" title="Explore">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+          </svg>
+          <span class="hidden md:inline">Explore</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Your Library Section -->
+    <div class="px-1 py-1 md:px-3 md:py-2">
+      <h3 class="hidden md:block mb-2 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+        Your Library
+      </h3>
+      <div class="space-y-1">
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="library" title="Your Library">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+          </svg>
+          <span class="hidden md:inline">Your Library</span>
+        </button>
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="liked" title="Liked Songs">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+          </svg>
+          <span class="hidden md:inline">Liked Songs</span>
+        </button>
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="recent" title="Recently Played">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"></path>
+            <path d="M12 7v5l3 3"></path>
+          </svg>
+          <span class="hidden md:inline">Recently Played</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Playlists Section -->
+    <div class="px-1 py-1 md:px-3 md:py-2">
+      <h3 class="hidden md:block mb-2 px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+        Playlists
+      </h3>
+      <div class="space-y-1">
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="create-playlist" title="Create Playlist">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 8v8"></path>
+            <path d="M8 12h8"></path>
+          </svg>
+          <span class="hidden md:inline">Create Playlist</span>
+        </button>
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="playlist-chill" title="Chill Vibes">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+          </svg>
+          <span class="hidden md:inline">Chill Vibes</span>
+        </button>
+        <button class="w-full flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" data-view="playlist-workout" title="Workout Mix">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+          </svg>
+          <span class="hidden md:inline">Workout Mix</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme Toggle -->
+  <div class="p-2 md:p-4 border-t border-border">
+    <button id="toggle-theme" class="flex justify-center md:justify-start items-center gap-3 p-2 md:px-3 md:py-2 w-full text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground" title="Toggle Theme">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2"></path>
+        <path d="M12 20v2"></path>
+        <path d="m4.93 4.93 1.41 1.41"></path>
+        <path d="m17.66 17.66 1.41 1.41"></path>
+        <path d="M2 12h2"></path>
+        <path d="M20 12h2"></path>
+        <path d="m6.34 17.66-1.41 1.41"></path>
+        <path d="m19.07 4.93-1.41 1.41"></path>
+      </svg>
+      <span class="hidden md:inline">Light Mode</span>
+    </button>
+  </div>
+</div>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-auto pb-24">
+      <div class="py-6">
+        <div class="container mx-auto px-4">
+          <!-- Top Bar -->
+          <div class="flex items-center justify-between mb-6">
+            <div class="relative w-full max-w-md" id="search-container">
+              <div class="relative">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <input type="search" id="search-input" placeholder="Search for songs, artists, or albums..." class="pl-10 bg-muted/50 border-none focus:outline-none focus:ring-1 focus:ring-primary w-full py-2 px-4 rounded-md">
+              </div>
+              <div id="search-results" class="absolute z-10 mt-1 w-full bg-card border border-border rounded-md shadow-lg overflow-hidden hidden">
+                <div class="max-h-80 overflow-y-auto p-1" id="search-results-container">
+                  <!-- Search results will be populated here -->
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <button class="rounded-full p-2 hover:bg-accent">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                  <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                  <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                </svg>
+              </button>
+
+              <div class="relative" id="user-dropdown-container">
+                <button id="user-dropdown-trigger" class="rounded-full flex items-center gap-2 p-2 hover:bg-accent">
+                  <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-medium">
+                    U
+                  </div>
+                  <span class="font-medium hidden sm:inline-block">User</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 text-muted-foreground">
+                    <path d="m6 9 6 6 6-6"></path>
+                  </svg>
+                </button>
+                <div id="user-dropdown" class="absolute right-0 mt-2 w-56 bg-card border border-border rounded-md shadow-lg z-10 hidden">
+                  <div class="py-2 px-3 text-sm font-medium border-b border-border">My Account</div>
+                  <div class="py-1">
+                    <button class="w-full text-left px-4 py-2 text-sm hover:bg-accent">Profile</button>
+                    <button class="w-full text-left px-4 py-2 text-sm hover:bg-accent">Settings</button>
+                    <button class="w-full text-left px-4 py-2 text-sm hover:bg-accent">Subscription</button>
+                  </div>
+                  <div class="border-t border-border py-1">
+                    <button class="w-full text-left px-4 py-2 text-sm hover:bg-accent">Log out</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Home Page Content -->
+        <div id="home-page" class="container mx-auto px-4">
+          <div class="space-y-10 animate-in fade-in duration-500">
+            <!-- Featured Section -->
+            <section id="trending-section">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold">Trending Today</h2>
+                <div class="flex items-center gap-2">
+                  <button class="rounded-full p-2 border border-border hover:bg-accent" id="trending-prev">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                      <path d="m15 18-6-6 6-6"></path>
+                    </svg>
+                  </button>
+                  <button class="rounded-full p-2 border border-border hover:bg-accent" id="trending-next">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                      <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div id="trending-container" class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x">
+                <!-- Trending songs will be populated here -->
+                <div class="flex-shrink-0 w-[250px] animate-pulse">
+                  <div class="aspect-square bg-muted rounded-lg"></div>
+                  <div class="h-4 w-3/4 bg-muted rounded mt-3"></div>
+                  <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                </div>
+                <div class="flex-shrink-0 w-[250px] animate-pulse">
+                  <div class="aspect-square bg-muted rounded-lg"></div>
+                  <div class="h-4 w-3/4 bg-muted rounded mt-3"></div>
+                  <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                </div>
+                <div class="flex-shrink-0 w-[250px] animate-pulse">
+                  <div class="aspect-square bg-muted rounded-lg"></div>
+                  <div class="h-4 w-3/4 bg-muted rounded mt-3"></div>
+                  <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Recently Played -->
+            <section id="recently-played-section" class="hidden">
+              <h2 class="text-2xl font-bold mb-4">Recently Played</h2>
+              <div id="recently-played-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Recently played songs will be populated here -->
+              </div>
+            </section>
+
+            <!-- Top Artists -->
+            <section>
+              <h2 class="text-2xl font-bold mb-4">Top Artists</h2>
+              <div id="top-artists-container" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6">
+                <!-- Top artists will be populated here -->
+                <div class="flex flex-col items-center gap-3 animate-pulse">
+                  <div class="w-24 h-24 rounded-full bg-muted"></div>
+                  <div class="h-4 w-20 bg-muted rounded"></div>
+                  <div class="h-3 w-16 bg-muted rounded"></div>
+                </div>
+                <div class="flex flex-col items-center gap-3 animate-pulse">
+                  <div class="w-24 h-24 rounded-full bg-muted"></div>
+                  <div class="h-4 w-20 bg-muted rounded"></div>
+                  <div class="h-3 w-16 bg-muted rounded"></div>
+                </div>
+                <div class="flex flex-col items-center gap-3 animate-pulse">
+                  <div class="w-24 h-24 rounded-full bg-muted"></div>
+                  <div class="h-4 w-20 bg-muted rounded"></div>
+                  <div class="h-3 w-16 bg-muted rounded"></div>
+                </div>
+              </div>
+              <div class="flex justify-center mt-6 hidden" id="show-more-artists-container">
+                <button id="show-more-artists" class="flex items-center gap-2 px-4 py-2 border border-border rounded-md hover:bg-accent">
+                  <span>Show More</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="m6 9 6 6 6-6"></path>
+                  </svg>
+                </button>
+              </div>
+            </section>
+
+            <!-- Devotional Music Sections -->
+            <h2 class="text-3xl font-bold mb-6 pt-4">Devotional Music</h2>
+
+            <!-- Shiva Bhajans -->
+            <section id="shiva-bhajans-section">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                  <!-- <div class="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-500">
+                    <span class="text-lg"><img width="20" src="img/om.png" alt="om"></span>
+                  </div> -->
+                  <h2 class="text-2xl font-bold">Shiva Bhajans</h2>
+                </div>
+                <button id="play-all-shiva" class="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  <span>Play All</span>
+                </button>
+              </div>
+
+              <div id="shiva-bhajans-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Shiva bhajans will be populated here -->
+                <div class="flex gap-4 items-center animate-pulse">
+                  <div class="w-16 h-16 bg-muted rounded-md"></div>
+                  <div class="flex-1">
+                    <div class="h-4 w-3/4 bg-muted rounded"></div>
+                    <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                  </div>
+                </div>
+                <div class="flex gap-4 items-center animate-pulse">
+                  <div class="w-16 h-16 bg-muted rounded-md"></div>
+                  <div class="flex-1">
+                    <div class="h-4 w-3/4 bg-muted rounded"></div>
+                    <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                  </div>
+                </div>
+                <div class="flex gap-4 items-center animate-pulse">
+                  <div class="w-16 h-16 bg-muted rounded-md"></div>
+                  <div class="flex-1">
+                    <div class="h-4 w-3/4 bg-muted rounded"></div>
+                    <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Durga & Ambe Maa Bhajans -->
+            <section id="durga-bhajans-section">
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                  <!-- <div class="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-red-500 to-orange-500">
+                    <span class="text-lg"><img width="50" src="img/durga.png" alt=""></span>
+                  </div> -->
+                  <h2 class="text-2xl font-bold">Durga & Ambe Maa Bhajans</h2>
+                </div>
+                <button id="play-all-durga" class="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  <span>Play All</span>
+                </button>
+              </div>
+
+              <div id="durga-bhajans-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Durga bhajans will be populated here -->
+                <div class="flex gap-4 items-center animate-pulse">
+                  <div class="w-16 h-16 bg-muted rounded-md"></div>
+                  <div class="flex-1">
+                    <div class="h-4 w-3/4 bg-muted rounded"></div>
+                    <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                  </div>
+                </div>
+                <div class="flex gap-4 items-center animate-pulse">
+                  <div class="w-16 h-16 bg-muted rounded-md"></div>
+                  <div class="flex-1">
+                    <div class="h-4 w-3/4 bg-muted rounded"></div>
+                    <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                  </div>
+                </div>
+                <div class="flex gap-4 items-center animate-pulse">
+                  <div class="w-16 h-16 bg-muted rounded-md"></div>
+                  <div class="flex-1">
+                    <div class="h-4 w-3/4 bg-muted rounded"></div>
+                    <div class="h-3 w-1/2 bg-muted rounded mt-2"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-center mt-6 hidden" id="show-more-durga-container">
+                <button id="show-more-durga" class="flex items-center gap-2 px-4 py-2 border border-border rounded-md hover:bg-accent">
+                  <span>Show More</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="m6 9 6 6 6-6"></path>
+                  </svg>
+                </button>
+              </div>
+            </section>
+
+            <!-- Other Devotional Sections
+            <section id="krishna-bhajans-section" class="devotional-section" data-query="krishna bhajan hare krishna" data-icon="" data-color="from-cyan-500 to-blue-500" data-title="Krishna Bhajans">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <section id="ram-bhajans-section" class="devotional-section" data-query="ram bhajan jai shri ram" data-icon="" data-color="from-green-500 to-emerald-500" data-title="Ram Bhajans">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <section id="hanuman-bhajans-section" class="devotional-section" data-query="hanuman chalisa jai hanuman" data-icon="" data-color="from-orange-500 to-red-500" data-title="Hanuman Bhajans">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <section id="garba-section" class="devotional-section" data-query="garba dandiya navratri" data-icon="" data-color="from-pink-500 to-purple-500" data-title="Garba & Dandiya">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <section id="hansraj-section" class="devotional-section" data-query="hansraj raghuwanshi bhajan" data-icon="" data-color="from-yellow-500 to-amber-500" data-title="Hansraj Raghuwanshi">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <!-- Popular Music Sections -- >
+            <h2 class="text-3xl font-bold mb-6 pt-4">Popular Music</h2>
+
+            <section id="hindi-hits-section" class="category-section" data-query="hindi top songs" data-title="🇮🇳 Hindi Hits">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <section id="english-tracks-section" class="english-tracks-section" data-artist="david bowie" data-title="David Bowie Classics">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <section id="alan-walker-section" class="english-tracks-section" data-artist="alan walker" data-title="Alan Walker Electronic Hits">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <section id="mick-jagger-section" class="english-tracks-section" data-artist="mick jagger" data-title="Mick Jagger Rock Legends">
+              <!-- Will be populated by JavaScript -- >
+            </section>
+
+            <section id="adele-section" class="english-tracks-section" data-artist="adele" data-title="Adele's Greatest Hits">
+              <!-- Will be populated by JavaScript -- >
+            </section> -->
+
+            <section id="bhojpuri-section" class="category-section" data-query="bhojpuri songs" data-title=" Bhojpuri Beats">
+              <!-- Will be populated by JavaScript -->
+            </section>
+
+            <section id="party-section" class="category-section" data-query="party songs" data-title=" Party Vibes">
+              <!-- Will be populated by JavaScript -->
+            </section>
+
+            <section id="lofi-section" class="category-section" data-query="lofi chill" data-title=" Lo-Fi & Chill">
+              <!-- Will be populated by JavaScript -->
+            </section>   
+
+            <!-- Genre Explorer -->
+            <!-- <section>
+              <h2 class="text-2xl font-bold mb-4">Browse by Genre</h2>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="overflow-hidden border-none group">
+                  <div class="p-0 relative h-32 bg-gradient-to-br from-pink-500 to-purple-500 hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span class="text-4xl group-hover:scale-125 transition-transform duration-300">🎵</span>
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                      <h3 class="font-bold text-white">Pop</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="overflow-hidden border-none group">
+                  <div class="p-0 relative h-32 bg-gradient-to-br from-blue-500 to-indigo-500 hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span class="text-4xl group-hover:scale-125 transition-transform duration-300">🎤</span>
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                      <h3 class="font-bold text-white">Hip Hop</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="overflow-hidden border-none group">
+                  <div class="p-0 relative h-32 bg-gradient-to-br from-red-500 to-orange-500 hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span class="text-4xl group-hover:scale-125 transition-transform duration-300">🎸</span>
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                      <h3 class="font-bold text-white">Rock</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="overflow-hidden border-none group">
+                  <div class="p-0 relative h-32 bg-gradient-to-br from-green-500 to-teal-500 hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span class="text-4xl group-hover:scale-125 transition-transform duration-300">🎧</span>
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                      <h3 class="font-bold text-white">Electronic</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="overflow-hidden border-none group">
+                  <div class="p-0 relative h-32 bg-gradient-to-br from-yellow-500 to-amber-500 hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span class="text-4xl group-hover:scale-125 transition-transform duration-300">🎷</span>
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                      <h3 class="font-bold text-white">Jazz</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="overflow-hidden border-none group">
+                  <div class="p-0 relative h-32 bg-gradient-to-br from-purple-500 to-violet-500 hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span class="text-4xl group-hover:scale-125 transition-transform duration-300">🎻</span>
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                      <h3 class="font-bold text-white">Classical</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="overflow-hidden border-none group">
+                  <div class="p-0 relative h-32 bg-gradient-to-br from-indigo-500 to-blue-500 hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span class="text-4xl group-hover:scale-125 transition-transform duration-300">🎹</span>
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                      <h3 class="font-bold text-white">R&B</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="overflow-hidden border-none group">
+                  <div class="p-0 relative h-32 bg-gradient-to-br from-teal-500 to-cyan-500 hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span class="text-4xl group-hover:scale-125 transition-transform duration-300">🥁</span>
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                      <h3 class="font-bold text-white">Indie</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section> -->
+         
+          </div>
         </div>
         
-        <!-- Sidebar Navigation -->
-        <div class="hidden md:flex flex-col h-full w-64 p-6 bg-gradient-to-b from-[#0a0a0f]/90 to-[#15151a]/90 border-r border-[#25252a]/50 transition-all duration-300 ease-in-out z-20" id="navbar">
-            <!-- Logo with animated gradient -->
-            <div class="flex items-center justify-center mb-8">
-                <div class="floating-disc w-12 h-12 rounded-full bg-gradient-to-br from-[#7b4dff] to-[#9a7dff] flex items-center justify-center text-white text-xl font-bold mr-3">
-                    <i class="fas fa-music"></i>
-                </div>
-                <h1 class="text-2xl font-bold gradient-text">songify</h1>
-            </div>
-            
-            <!-- User Profile with animated border -->
-            <div class="profile flex items-center justify-between p-3 rounded-xl glass mb-8 transition-all cursor-pointer hover:bg-[#2a2a32]/70 group relative overflow-hidden">
-                <div class="absolute inset-0 border-2 border-transparent group-hover:border-[#7b4dff] rounded-xl transition-all duration-300 pointer-events-none"></div>
-                <div class="flex items-center gap-3 z-10">
-                    <div class="relative">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="h-10 w-10 rounded-full object-cover border-2 border-[#7b4dff]/50" />
-                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#1e1e24]"></div>
-                    </div>
-                    <div>
-                        <h3 class="font-medium">Music Lover</h3>
-                        <p class="text-xs text-[#b3b3b3]">Premium Member</p>
-                    </div>
-                </div>
-                <i class="fas fa-ellipsis-h text-[#b3b3b3] hover:text-white transition-all z-10"></i>
-            </div>
-            
-            <!-- Main Navigation with hover effects -->
-            <div class="flex-1 flex flex-col gap-1 mb-6">
-                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#2a2a32]/70 transition-all text-white group relative overflow-hidden">
-                    <div class="absolute inset-0 bg-[#7b4dff] opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                    <div class="w-6 h-6 flex items-center justify-center">
-                        <i class="fas fa-home text-[#7b4dff]"></i>
-                    </div>
-                    <span>Home</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#2a2a32]/70 transition-all text-[#b3b3b3] hover:text-white group relative overflow-hidden">
-                    <div class="absolute inset-0 bg-[#7b4dff] opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                    <div class="w-6 h-6 flex items-center justify-center">
-                        <i class="fas fa-compass text-[#7b4dff]"></i>
-                    </div>
-                    <span>Explore</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#2a2a32]/70 transition-all text-[#b3b3b3] hover:text-white group relative overflow-hidden">
-                    <div class="absolute inset-0 bg-[#7b4dff] opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                    <div class="w-6 h-6 flex items-center justify-center">
-                        <i class="fas fa-heart text-[#7b4dff]"></i>
-                    </div>
-                    <span>Favorites</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#2a2a32]/70 transition-all text-[#b3b3b3] hover:text-white group relative overflow-hidden">
-                    <div class="absolute inset-0 bg-[#7b4dff] opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                    <div class="w-6 h-6 flex items-center justify-center">
-                        <i class="fas fa-clock text-[#7b4dff]"></i>
-                    </div>
-                    <span>Recent</span>
-                </a>
-            </div>
-            
-            <!-- My Collections with animated icons -->
-            <div class="mb-4">
-                <h3 class="text-xs text-[#b3b3b3] font-medium uppercase tracking-wider mb-2">My Collections</h3>
-                <div class="flex flex-col gap-1">
-                    <a href="./playlists.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#2a2a32]/70 transition-all text-[#b3b3b3] hover:text-white group relative overflow-hidden">
-                        <div class="absolute inset-0 bg-[#7b4dff] opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                        <div class="w-6 h-6 flex items-center justify-center">
-                            <i class="fas fa-list-music text-[#7b4dff] animate-pulse" style="animation-duration: 2s"></i>
-                        </div>
-                        <span>Playlists</span>
-                    </a>
-                    <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#2a2a32]/70 transition-all text-[#b3b3b3] hover:text-white group relative overflow-hidden">
-                        <div class="absolute inset-0 bg-[#7b4dff] opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                        <div class="w-6 h-6 flex items-center justify-center">
-                            <i class="fas fa-compact-disc text-[#7b4dff] animate-spin" style="animation-duration: 8s"></i>
-                        </div>
-                        <span>Albums</span>
-                    </a>
-                    <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#2a2a32]/70 transition-all text-[#b3b3b3] hover:text-white group relative overflow-hidden">
-                        <div class="absolute inset-0 bg-[#7b4dff] opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                        <div class="w-6 h-6 flex items-center justify-center">
-                            <i class="fas fa-music text-[#7b4dff]"></i>
-                        </div>
-                        <span>Songs</span>
-                    </a>
-                    <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-[#2a2a32]/70 transition-all text-[#b3b3b3] hover:text-white group relative overflow-hidden">
-                        <div class="absolute inset-0 bg-[#7b4dff] opacity-0 group-hover:opacity-10 transition-all duration-300"></div>
-                        <div class="w-6 h-6 flex items-center justify-center">
-                            <i class="fas fa-user text-[#7b4dff]"></i>
-                        </div>
-                        <span>Artists</span>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Create Playlist Button with ripple effect -->
-            <button class="mt-auto flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-[#7b4dff] to-[#9a7dff] hover:from-[#8a5cff] hover:to-[#a97dff] transition-all text-white ripple relative overflow-hidden">
-                <i class="fas fa-plus"></i>
-                <span>Create Playlist</span>
+        <!-- Artist Page -->
+        <div id="artist-page" class="container mx-auto px-4 py-6 animate-in fade-in duration-300 hidden">
+          <div class="flex items-center gap-4 mb-6">
+            <button id="back-to-home" class="h-10 w-10 rounded-full p-2 hover:bg-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path d="m15 18-6-6 6-6"></path>
+              </svg>
             </button>
+            <h1 class="text-2xl font-bold" id="artist-name">Artist Name</h1>
+          </div>
+          <div id="artist-songs-container">
+            <!-- Artist songs will be populated here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Music Player -->
+    <div id="mini-player" class="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 transition-all duration-500">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <img id="mini-player-image" src="/placeholder.svg?height=48&width=48" alt="Song" class="h-12 w-12 rounded-md object-cover">
+            <div class="min-w-0">
+              <h4 id="mini-player-title" class="font-medium truncate">Select a song to play</h4>
+              <p id="mini-player-artist" class="text-sm text-muted-foreground truncate">-</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 md:gap-4">
+            <button id="mini-player-like" class="hidden md:flex rounded-full p-2 hover:bg-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+              </svg>
+            </button>
+
+            <button id="mini-player-prev" class="rounded-full p-2 hover:bg-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path d="m19 20-10-8 10-8v16Z"></path>
+                <path d="M5 4v16"></path>
+              </svg>
+            </button>
+
+            <button id="mini-player-play" class="rounded-full h-10 w-10 bg-primary text-primary-foreground flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 ml-0.5">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+            </button>
+
+            <button id="mini-player-next" class="rounded-full p-2 hover:bg-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path d="m5 4 10 8-10 8V4Z"></path>
+                <path d="M19 5v14"></path>
+              </svg>
+            </button>
+
+            <button id="mini-player-expand" class="hidden md:flex rounded-full p-2 hover:bg-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <!-- Mobile Bottom Navigation with animated icons -->
-        <div class="fixed bottom-0 left-0 right-0 flex items-center justify-around p-3 glass border-t border-[#25252a]/50 z-50 md:hidden">
-            <a href="#" class="flex flex-col items-center p-2 rounded-full transition-all text-[#7b4dff] group">
-                <div class="relative">
-                    <i class="fas fa-home text-xl"></i>
-                    <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#7b4dff] rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>
-                </div>
-                <span class="text-xs mt-1">Home</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-2 rounded-full transition-all text-[#b3b3b3] hover:text-white group">
-                <div class="relative">
-                    <i class="fas fa-search text-xl"></i>
-                    <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#7b4dff] rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>
-                </div>
-                <span class="text-xs mt-1">Search</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-2 rounded-full transition-all text-[#b3b3b3] hover:text-white group">
-                <div class="relative">
-                    <i class="fas fa-list-music text-xl"></i>
-                    <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#7b4dff] rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>
-                </div>
-                <span class="text-xs mt-1">Library</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-2 rounded-full transition-all text-[#b3b3b3] hover:text-white group">
-                <div class="relative">
-                    <i class="fas fa-cog text-xl animate-spin" style="animation-duration: 4s"></i>
-                    <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#7b4dff] rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>
-                </div>
-                <span class="text-xs mt-1">Settings</span>
-            </a>
+        <div class="mt-1 flex items-center gap-2">
+          <span id="current-time" class="text-xs text-muted-foreground w-8 text-right">0:00</span>
+          <div class="flex-1 h-1 bg-muted rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-primary" style="width: 0%"></div>
+          </div>
+          <span id="duration" class="text-xs text-muted-foreground w-8">0:00</span>
         </div>
-
-        <!-- Main Content Area -->
-        <div class="main-content flex-1 overflow-y-auto relative">
-            <!-- Top Navigation with glass effect -->
-            <div class="sticky top-0 glass p-4 flex justify-between items-center z-30 border-b border-[#25252a]/50">
-                <div class="flex items-center gap-4">
-                    <button class="nav-button h-10 w-10 bg-[#1e1e24]/70 rounded-full flex justify-center items-center hover:bg-[#2a2a32]/70 transition-all ripple" id="playlistShow">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="hidden md:flex items-center gap-2">
-                        <button class="nav-button h-8 w-8 bg-[#1e1e24]/70 rounded-full flex justify-center items-center hover:bg-[#2a2a32]/70 transition-all ripple">
-                            <i class="fas fa-chevron-left text-sm"></i>
-                        </button>
-                        <button class="nav-button h-8 w-8 bg-[#1e1e24]/70 rounded-full flex justify-center items-center hover:bg-[#2a2a32]/70 transition-all ripple">
-                            <i class="fas fa-chevron-right text-sm"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <div class="relative">
-                        <input type="text" placeholder="Search songs, artists..." id="search-box" 
-                            class="h-10 w-64 rounded-full outline-none pl-10 pr-4 bg-[#1e1e24]/70 text-sm text-white placeholder-[#b3b3b3] transition-all focus:w-72 focus:ring-2 focus:ring-[#7b4dff] focus:border-transparent" />
-                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
-                            <i class="fas fa-search text-[#b3b3b3]"></i>
-                        </div>
-                        <ul id="suggestions" class="absolute bg-[#1e1e24] w-full mt-2 rounded-lg shadow-lg max-h-60 overflow-y-auto hidden z-50 border border-[#25252a]">
-                            <!-- Suggestions will be populated here -->
-                        </ul>
-                    </div>
-                    <button class="nav-button h-10 w-10 bg-[#1e1e24]/70 rounded-full flex justify-center items-center hover:bg-[#2a2a32]/70 transition-all ripple">
-                        <i class="fas fa-microphone text-[#b3b3b3] hover:text-[#7b4dff]"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Main Content -->
-            <div class="p-6">
-                <!-- Welcome Section with animated gradient text -->
-                <div class="mb-8 animate-fade">
-                    <h1 class="text-3xl font-bold mb-2 gradient-text">Good afternoon</h1>
-                    <p class="text-[#b3b3b3] mb-6">Here's what's trending in your library today</p>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                        <div class="col-span-2 bg-gradient-to-r from-[#5038a0] to-[#2a1a5e] rounded-xl p-4 flex items-center overflow-hidden hover-scale transition-all cursor-pointer group relative">
-                            <div class="absolute inset-0 bg-gradient-to-r from-[#7b4dff]/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                            <div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mr-4 backdrop-blur-sm">
-                                <i class="fas fa-heart text-2xl text-white animate-pulse" style="animation-duration: 1.5s"></i>
-                            </div>
-                            <div class="relative z-10">
-                                <h3 class="text-xl font-bold">Liked Songs</h3>
-                                <p class="text-sm text-[#b3b3b3]">128 songs · 12h 45m</p>
-                            </div>
-                        </div>
-                        <div class="bg-gradient-to-r from-[#3a5c8a] to-[#1a2a4a] rounded-xl p-4 flex items-center overflow-hidden hover-scale transition-all cursor-pointer group relative">
-                            <div class="absolute inset-0 bg-gradient-to-r from-[#7b4dff]/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                            <div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mr-4 backdrop-blur-sm">
-                                <i class="fas fa-clock text-2xl text-white"></i>
-                            </div>
-                            <div class="relative z-10">
-                                <h3 class="font-bold">Recently Played</h3>
-                                <p class="text-sm text-[#b3b3b3]">Continue listening</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Trending Section with animated cards -->
-                <div class="mb-8 animate-fade" style="animation-delay: 0.1s">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold gradient-text">Trending Today</h2>
-                        <div class="flex gap-2">
-                            <button class="nav-button h-8 w-8 bg-[#1e1e24]/70 rounded-full flex justify-center items-center hover:bg-[#2a2a32]/70 transition-all ripple" id="prev-button">
-                                <i class="fas fa-chevron-left text-sm"></i>
-                            </button>
-                            <button class="nav-button h-8 w-8 bg-[#1e1e24]/70 rounded-full flex justify-center items-center hover:bg-[#2a2a32]/70 transition-all ripple" id="next-button">
-                                <i class="fas fa-chevron-right text-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="relative">
-                        <div class="scroll-container flex gap-6 overflow-x-auto pb-4 scroll-smooth" id="cards-container">
-                            <!-- Cards will be populated here -->
-                            <div class="skeleton h-[390px] w-[275px] flex-shrink-0 rounded-xl"></div>
-                            <div class="skeleton h-[390px] w-[275px] flex-shrink-0 rounded-xl"></div>
-                            <div class="skeleton h-[390px] w-[275px] flex-shrink-0 rounded-xl"></div>
-                            <div class="skeleton h-[390px] w-[275px] flex-shrink-0 rounded-xl"></div>
-                            <div class="skeleton h-[390px] w-[275px] flex-shrink-0 rounded-xl"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Playlists Section with responsive grid -->
-                <div class="mb-8 animate-fade" style="animation-delay: 0.2s">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold gradient-text">Your Playlists</h2>
-                        <a href="#" class="text-sm text-[#b3b3b3] hover:text-[#7b4dff] transition-all flex items-center gap-1">
-                            See all <i class="fas fa-chevron-right text-xs"></i>
-                        </a>
-                    </div>
-                    
-                    <div class="responsive-grid" id="playlist-container">
-                        <!-- Playlist cards will be populated here -->
-                        <div class="skeleton h-48 rounded-xl"></div>
-                        <div class="skeleton h-48 rounded-xl"></div>
-                        <div class="skeleton h-48 rounded-xl"></div>
-                        <div class="skeleton h-48 rounded-xl"></div>
-                        <div class="skeleton h-48 rounded-xl"></div>
-                        <div class="skeleton h-48 rounded-xl"></div>
-                    </div>
-                </div>
-                
-                <!-- Recently Played Section with animated music bars -->
-                <div class="animate-fade" style="animation-delay: 0.3s">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold gradient-text">Recently Played</h2>
-                        <a href="#" class="text-sm text-[#b3b3b3] hover:text-[#7b4dff] transition-all flex items-center gap-1">
-                            See all <i class="fas fa-chevron-right text-xs"></i>
-                        </a>
-                    </div>
-                    
-                    <div class="bg-[#1e1e24]/70 rounded-xl overflow-hidden backdrop-blur-sm">
-                        <table class="w-full">
-                            <thead class="border-b border-[#25252a]/50">
-                                <tr class="text-left text-[#b3b3b3]">
-                                    <th class="p-4">#</th>
-                                    <th class="p-4">Title</th>
-                                    <th class="p-4 hidden md:table-cell">Artist</th>
-                                    <th class="p-4 hidden md:table-cell">Album</th>
-                                    <th class="p-4 text-right"><i class="fas fa-clock"></i></th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentTable">
-                                <tr class="hover:bg-[#2a2a32]/70 transition-all cursor-pointer group">
-                                    <td class="p-4">
-                                        <div class="music-bar">
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </td>
-                                    <td class="p-4 flex items-center gap-3">
-                                        <div class="relative">
-                                            <img src="https://c.saavncdn.com/351/Believers-English-2021-20210503232242-50x50.jpg" alt="Song" class="h-10 w-10 rounded group-hover:scale-110 transition-transform">
-                                            <div class="absolute inset-0 bg-black/30 rounded opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                                                <i class="fas fa-play text-white text-xs"></i>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-medium group-hover:text-[#7b4dff] transition-all">Angels</h4>
-                                            <p class="text-sm text-[#b3b3b3] md:hidden">The XX</p>
-                                        </div>
-                                    </td>
-                                    <td class="p-4 hidden md:table-cell group-hover:text-[#7b4dff] transition-all">The XX</td>
-                                    <td class="p-4 hidden md:table-cell group-hover:text-[#7b4dff] transition-all">Coexist</td>
-                                    <td class="p-4 text-right text-[#b3b3b3] group-hover:text-white transition-all">2:38</td>
-                                </tr>
-                                <!-- More rows will be populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Playlist Screen (Hidden by default) with animated transitions -->
-        <div class="fixed inset-0 bg-[#0a0a0f]/95 z-40 hidden overflow-y-auto backdrop-blur-sm" id="playlist-screen">
-            <div class="container mx-auto p-6 max-w-6xl">
-                <div class="flex items-center mb-6">
-                    <button class="nav-button h-10 w-10 bg-[#1e1e24]/70 rounded-full flex justify-center items-center hover:bg-[#2a2a32]/70 transition-all ripple mr-4" id="playlistHide">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <h1 class="text-2xl font-bold gradient-text">Playlist Details</h1>
-                </div>
-                
-                <div class="flex flex-col md:flex-row gap-8 mb-8">
-                    <div class="w-full md:w-1/3 lg:w-1/4 flex justify-center md:justify-start">
-                        <img src="https://c.saavncdn.com/editorial/logo/AllTimeHitHindi_20210623065437.jpg" alt="Playlist Cover" class="rounded-2xl w-full max-w-xs shadow-xl hover-scale transition-slow glow" id="table-play-img">
-                    </div>
-                    <div class="flex-1 flex flex-col justify-center">
-                        <span class="text-xs text-[#b3b3b3] uppercase tracking-wider mb-2">Playlist</span>
-                        <h2 class="text-4xl font-bold mb-4" id="table-play-title">Most Streamed Love Songs: Hindi</h2>
-                        <p class="text-[#b3b3b3] mb-6" id="table-play-count">Created by Songify · 76.8K Followers · 30 Songs · 1h 45m</p>
-                        
-                        <div class="flex flex-wrap gap-3">
-                            <button class="bg-gradient-to-r from-[#7b4dff] to-[#9a7dff] text-white px-6 py-3 rounded-full hover:from-[#8a5cff] hover:to-[#a97dff] transition-all flex items-center gap-2 ripple">
-                                <i class="fas fa-play"></i> Play All
-                            </button>
-                            <button class="bg-[#1e1e24]/70 text-white px-6 py-3 rounded-full hover:bg-[#2a2a32]/70 transition-all flex items-center gap-2 ripple">
-                                <i class="fas fa-heart"></i> Like
-                            </button>
-                            <button class="bg-[#1e1e24]/70 text-white px-6 py-3 rounded-full hover:bg-[#2a2a32]/70 transition-all flex items-center gap-2 ripple">
-                                <i class="fas fa-share-alt"></i> Share
-                            </button>
-                            <button class="bg-[#1e1e24]/70 text-white px-6 py-3 rounded-full hover:bg-[#2a2a32]/70 transition-all flex items-center gap-2 ripple">
-                                <i class="fas fa-ellipsis-h"></i> More
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="glass rounded-2xl overflow-hidden backdrop-blur-sm">
-                    <div class="p-4 border-b border-[#25252a]/50 flex items-center gap-4">
-                        <div class="flex-1 flex items-center gap-6">
-                            <span class="text-[#b3b3b3]">#</span>
-                            <span class="text-[#b3b3b3]">Title</span>
-                        </div>
-                        <span class="text-[#b3b3b3] hidden md:inline-block flex-1">Album</span>
-                        <span class="text-[#b3b3b3] w-16 text-right"><i class="fas fa-clock"></i></span>
-                    </div>
-                    <div class="max-h-[60vh] overflow-y-auto" id="songTable">
-                        <!-- Songs will be populated here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Music Player with glass effect and animated controls -->
-        <div class="fixed bottom-0 left-0 right-0 glass border-t border-[#25252a]/50 z-40 transition-all duration-300 ease-in-out" id="music-player">
-            <div class="container mx-auto p-4">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <!-- Song Info with animated cover -->
-                    <div class="flex items-center gap-4 w-full md:w-1/4">
-                        <div class="relative">
-                            <img src="https://c.saavncdn.com/351/Believers-English-2021-20210503232242-50x50.jpg" 
-                                 alt="Album Cover" 
-                                 class="h-14 w-14 rounded-lg object-cover hover-scale transition-all glow" 
-                                 id="img-m">
-                            <div class="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center opacity-0 hover:opacity-100 transition-all cursor-pointer" id="toggle-player">
-                                <i class="fas fa-chevron-up text-white"></i>
-                            </div>
-                        </div>
-                        <div class="overflow-hidden">
-                            <h3 class="font-medium truncate" id="audio_title">Angels</h3>
-                            <p class="text-sm text-[#b3b3b3] truncate" id="artist_name">The XX</p>
-                        </div>
-                        <button class="ml-auto md:hidden text-[#b3b3b3] hover:text-[#7b4dff] transition-all" id="mobile-toggle-player">
-                            <i class="fas fa-chevron-up"></i>
-                        </button>
-                    </div>
-                    
-                    <!-- Player Controls with animated buttons -->
-                    <div class="flex flex-col items-center w-full md:w-2/4">
-                        <div class="flex items-center gap-4 mb-2">
-                            <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all tooltip" id="shuffle">
-                                <i class="fas fa-random"></i>
-                                <span class="tooltip-text">Shuffle</span>
-                            </button>
-                            <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all text-xl tooltip" id="prev">
-                                <i class="fas fa-step-backward"></i>
-                                <span class="tooltip-text">Previous</span>
-                            </button>
-                            <button class="bg-gradient-to-r from-[#7b4dff] to-[#9a7dff] text-white h-10 w-10 rounded-full flex items-center justify-center hover:from-[#8a5cff] hover:to-[#a97dff] transition-all ripple glow" id="play-button">
-                                <i class="fas fa-play" id="play-icon"></i>
-                            </button>
-                            <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all text-xl tooltip" id="next">
-                                <i class="fas fa-step-forward"></i>
-                                <span class="tooltip-text">Next</span>
-                            </button>
-                            <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all tooltip" id="repeat">
-                                <i class="fas fa-redo"></i>
-                                <span class="tooltip-text">Repeat</span>
-                            </button>
-                        </div>
-                        
-                        <div class="w-full flex items-center gap-3">
-                            <span class="text-xs text-[#b3b3b3] w-10 text-right" id="current-time">0:00</span>
-                            <div class="flex-1 h-1 bg-[#3a3a42]/70 rounded-full overflow-hidden cursor-pointer">
-                                <div class="h-full bg-gradient-to-r from-[#7b4dff] to-[#9a7dff] rounded-full" id="progress-bar" style="width: 0%"></div>
-                            </div>
-                            <span class="text-xs text-[#b3b3b3] w-10" id="duration">0:00</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Additional Controls with animated volume slider -->
-                    <div class="hidden md:flex items-center justify-end gap-4 w-full md:w-1/4">
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all tooltip" id="queue">
-                            <i class="fas fa-list-ol"></i>
-                            <span class="tooltip-text">Queue</span>
-                        </button>
-                        <div class="flex items-center gap-2">
-                            <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all tooltip" id="volume-button">
-                                <i class="fas fa-volume-up" id="volume-icon"></i>
-                                <span class="tooltip-text">Volume</span>
-                            </button>
-                            <input type="range" min="0" max="100" value="80" 
-                                   class="w-24 accent-[#7b4dff] hover:accent-[#9a7dff] transition-all" 
-                                   id="volume">
-                        </div>
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all tooltip" id="full-screen-button">
-                            <i class="fas fa-expand"></i>
-                            <span class="tooltip-text">Fullscreen</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Expanded Player (Hidden by default) with animated progress bar -->
-        <div class="fixed bottom-16 left-0 right-0 glass border-t border-[#25252a]/50 z-30 hidden p-4 backdrop-blur-sm" id="expanded-player">
-            <div class="container mx-auto">
-                <div class="flex items-center gap-4 mb-4">
-                    <img src="https://c.saavncdn.com/351/Believers-English-2021-20210503232242-50x50.jpg" 
-                         alt="Album Cover" 
-                         class="h-12 w-12 rounded-lg object-cover rotate-disc">
-                    <div>
-                        <h3 class="font-medium" id="exp-audio_title">Angels</h3>
-                        <p class="text-sm text-[#b3b3b3]" id="exp-artist_name">The XX</p>
-                    </div>
-                </div>
-                
-                <div class="w-full flex items-center gap-3 mb-4">
-                    <span class="text-xs text-[#b3b3b3] w-10 text-right" id="exp-current-time">0:00</span>
-                    <div class="flex-1 h-1 bg-[#3a3a42]/70 rounded-full overflow-hidden cursor-pointer">
-                        <div class="h-full bg-gradient-to-r from-[#7b4dff] to-[#9a7dff] rounded-full" id="exp-progress-bar" style="width: 0%"></div>
-                    </div>
-                    <span class="text-xs text-[#b3b3b3] w-10" id="exp-duration">0:00</span>
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all" id="exp-shuffle">
-                        <i class="fas fa-random"></i>
-                    </button>
-                    <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all" id="exp-prev">
-                        <i class="fas fa-step-backward"></i>
-                    </button>
-                    <button class="bg-gradient-to-r from-[#7b4dff] to-[#9a7dff] text-white h-10 w-10 rounded-full flex items-center justify-center hover:from-[#8a5cff] hover:to-[#a97dff] transition-all ripple" id="exp-play-button">
-                        <i class="fas fa-play" id="exp-play-icon"></i>
-                    </button>
-                    <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all" id="exp-next">
-                        <i class="fas fa-step-forward"></i>
-                    </button>
-                    <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all" id="exp-repeat">
-                        <i class="fas fa-redo"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Full Screen Player with immersive background -->
-        <div class="fixed inset-0 bg-gradient-to-b from-[#0a0a0f] to-[#15151a] z-50 hidden flex flex-col" id="full-screen-player">
-            <div class="absolute top-6 right-6 z-50">
-                <button class="text-white text-2xl hover:text-[#7b4dff] transition-all ripple" id="exit-full-screen">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="flex-1 flex flex-col md:flex-row items-center justify-center gap-8 p-8 relative overflow-hidden">
-                <!-- Background artwork blur -->
-                <div class="absolute inset-0 overflow-hidden z-0">
-                    <img src="https://c.saavncdn.com/editorial/logo/AllTimeHitHindi_20210623065437.jpg" 
-                         alt="Album Background" 
-                         class="w-full h-full object-cover opacity-10 blur-2xl scale-110">
-                </div>
-                
-                <div class="w-full md:w-1/2 flex justify-center z-10">
-                    <img src="https://c.saavncdn.com/editorial/logo/AllTimeHitHindi_20210623065437.jpg" 
-                         alt="Album Cover" 
-                         class="max-w-full max-h-[60vh] rounded-2xl shadow-2xl rotate-disc hover-scale transition-slow glow" 
-                         id="full-screen-img">
-                </div>
-                
-                <div class="w-full md:w-1/2 z-10">
-                    <h1 class="text-4xl font-bold mb-2 gradient-text" id="full-song-name">Song Name</h1>
-                    <h2 class="text-2xl text-[#b3b3b3] mb-6" id="full-song-artist">Artist Name</h2>
-                    
-                    <!-- Waveform visualization -->
-                    <div class="waveform mb-6">
-                        <div class="waveform-bar"></div>
-                        <div class="waveform-bar"></div>
-                        <div class="waveform-bar"></div>
-                        <div class="waveform-bar"></div>
-                        <div class="waveform-bar"></div>
-                        <div class="waveform-bar"></div>
-                        <div class="waveform-bar"></div>
-                        <div class="waveform-bar"></div>
-                        <div class="waveform-bar"></div>
-                    </div>
-                    
-                    <div class="mb-8">
-                        <div class="w-full h-1 bg-[#3a3a42]/70 rounded-full overflow-hidden mb-2 cursor-pointer">
-                            <div class="h-full bg-gradient-to-r from-[#7b4dff] to-[#9a7dff] rounded-full" id="full-screen-progress" style="width: 0%"></div>
-                        </div>
-                        <div class="flex justify-between text-sm text-[#b3b3b3]">
-                            <span id="full-screen-current-time">0:00</span>
-                            <span id="full-screen-duration">0:00</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center justify-center gap-6 mb-8">
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all text-xl ripple" id="fs-shuffle">
-                            <i class="fas fa-random"></i>
-                        </button>
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all text-2xl ripple" id="fs-prev">
-                            <i class="fas fa-step-backward"></i>
-                        </button>
-                        <button class="bg-gradient-to-r from-[#7b4dff] to-[#9a7dff] text-white h-14 w-14 rounded-full flex items-center justify-center hover:from-[#8a5cff] hover:to-[#a97dff] transition-all ripple glow" id="fs-play-button">
-                            <i class="fas fa-play text-xl" id="fs-play-icon"></i>
-                        </button>
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all text-2xl ripple" id="fs-next">
-                            <i class="fas fa-step-forward"></i>
-                        </button>
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all text-xl ripple" id="fs-repeat">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="flex items-center justify-center gap-4 mb-8">
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all ripple" id="fs-volume-button">
-                            <i class="fas fa-volume-up" id="fs-volume-icon"></i>
-                        </button>
-                        <input type="range" min="0" max="100" value="80" 
-                               class="w-32 accent-[#7b4dff] hover:accent-[#9a7dff] transition-all" 
-                               id="fs-volume">
-                    </div>
-                    
-                    <div class="flex justify-center gap-4">
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all ripple">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all ripple">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                        <button class="text-[#b3b3b3] hover:text-[#7b4dff] transition-all ripple">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="p-6 glass border-t border-[#25252a]/50 backdrop-blur-sm">
-                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                    <i class="fas fa-list-music text-[#7b4dff]"></i>
-                    Up Next
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="up-next-container">
-                    <!-- Up next songs will be populated here -->
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-<script src="assets/script.js"></script>
+
+    <!-- Full Screen Player -->
+    <div id="full-player" class="fixed inset-0 bg-background z-50 transition-all duration-500 flex flex-col translate-y-full">
+      <div class="container mx-auto px-4 py-6 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-8">
+          <button id="full-player-close" class="rounded-full p-2 hover:bg-accent">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+          </button>
+
+          <h2 class="text-xl font-bold">Now Playing</h2>
+
+          <button class="rounded-full p-2 hover:bg-accent">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-center gap-8">
+          <div class="relative w-full max-w-md aspect-square rounded-lg overflow-hidden shadow-xl">
+          
+            <img id="full-player-image" src="/placeholder.svg?height=350&width=350" alt="Song" class="w-full h-full object-cover">
+
+            <div id="visualizer-container" class="absolute inset-0 bg-black/40 hidden">
+              <canvas id="visualizer" class="w-full h-full" width="400" height="400"></canvas>
+            </div>
+
+            <button id="toggle-visualizer" class="absolute bottom-4 right-4 bg-background/80 backdrop-blur-sm px-3 py-1 text-sm rounded-md">
+              Show Visualizer
+            </button>
+          </div>
+
+          <div class="text-center w-full max-w-md">
+            <h3 id="full-player-title" class="text-2xl font-bold mb-2">Select a song to play</h3>
+            <p id="full-player-artist" class="text-lg text-muted-foreground">-</p>
+          </div>
+
+          <div class="w-full max-w-md space-y-6">
+            <div class="flex items-center gap-4">
+              <span id="full-player-current-time" class="text-sm text-muted-foreground">0:00</span>
+              <div class="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                <div id="full-player-progress" class="h-full bg-primary" style="width: 0%"></div>
+              </div>
+              <span id="full-player-duration" class="text-sm text-muted-foreground">0:00</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <button class="rounded-full p-2 hover:bg-accent">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                  <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                </svg>
+              </button>
+
+              <div class="flex items-center gap-4">
+                <button id="full-player-prev" class="rounded-full p-3 hover:bg-accent">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                    <path d="m19 20-10-8 10-8v16Z"></path>
+                    <path d="M5 4v16"></path>
+                  </svg>
+                </button>
+
+                <button id="full-player-play" class="rounded-full h-14 w-14 bg-primary text-primary-foreground flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-7 w-7 ml-0.5">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+
+                <button id="full-player-next" class="rounded-full p-3 hover:bg-accent">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                    <path d="m5 4 10 8-10 8V4Z"></path>
+                    <path d="M19 5v14"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <button class="rounded-full p-2 hover:bg-accent">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                  <path d="M17 17H8a5 5 0 0 1-5-5 5 5 0 0 1 5-5h9"></path>
+                  <path d="m12 8 5 4-5 4"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <button id="full-player-like" class="rounded-full p-2 hover:bg-accent">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                </svg>
+              </button>
+
+              <div class="flex items-center gap-2 flex-1">
+                <button id="volume-toggle" class="rounded-full p-2 hover:bg-accent">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                </button>
+                <div class="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                  <div id="volume-bar" class="h-full bg-primary" style="width: 80%"></div>
+                </div>
+              </div>
+
+              <button id="full-player-minimize" class="rounded-full p-2 hover:bg-accent">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                  <polyline points="4 14 10 14 10 20"></polyline>
+                  <polyline points="20 10 14 10 14 4"></polyline>
+                  <line x1="14" y1="10" x2="21" y2="3"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="audio-player"></audio>
+  </div>
+
+  <script src="assets/script.js"></script>
 </body>
 </html>
